@@ -31,3 +31,19 @@ app.get("/models/:id", (req, res) => {
   }
   res.json(model);
 });
+
+app.use(express.json()); // permet de lire req.body en JSON
+// POST /produits -> ajoute un produit envoye dans le corps de la requete
+
+app.post("/models", (req, res) => {
+  if (!req.body.nom) {                          // donnee obligatoire manquante
+    return res.status(400).json({ erreur: "Le nom est obligatoire" });
+  }
+  const nouveau = {
+    id: models.length + 1,
+    nom: req.body.nom,
+    devlopeur: req.body.devlopeur
+  };
+  models.push(nouveau);                       // on ajoute au tableau
+  res.status(201).json(nouveau);                // 201 = cree
+});
