@@ -1,15 +1,11 @@
 const express = require("express");
 const app = express();
 
-let ias = [
-  { id: 1, nom: "Chat GPT", prix: 25 },
-  { id: 2, nom: "Claude", prix: 15 },
-  { id: 3, nom: "Gemini", prix: 120 }
+let models = [
+  { id: 1, nom: "GPT6 Astra", devlopeur: "Open IA" },
+  { id: 2, nom: "Fable 5.1", devlopeur: "Anthropic" },
+  { id: 3, nom: "Gemini 3.8 Flash", devlopeur: "Google" }
 ];
-// GET /produits -> renvoie tout le tableau
-app.get("/ias", (req, res) => {
-  res.json(ias);
-});
 
 // Route de test : GET /
 app.get("/", (req, res) => {
@@ -19,4 +15,19 @@ app.get("/", (req, res) => {
 // On demarre le serveur sur le port 3000
 app.listen(3000, () => {
   console.log("Serveur sur http://localhost:3000");
+});
+
+// GET /produits -> renvoie tout le tableau
+app.get("/models", (req, res) => {
+  res.json(models);
+});
+
+// GET /produits/2 -> renvoie le produit dont l id vaut 2
+app.get("/models/:id", (req, res) => {
+  const id = Number(req.params.id);            // ":id" arrive en texte -> on convertit
+  const model = models.find((p) => p.id === id);
+  if (!model) {                              // rien trouve
+    return res.status(404).json({ erreur: "IA introuvable" });
+  }
+  res.json(model);
 });
